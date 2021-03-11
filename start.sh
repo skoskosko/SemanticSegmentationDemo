@@ -1,9 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -e
+IMAGE_URL=http://192.168.0.2:56000/jpeg
 
 BASEDIR=$(dirname "$0")
-LOGFILE="$BASEDIR/server.log"
 
-echo "Starting in background and writing log file to $LOGFILE"
-nohup python3 -u "$BASEDIR/main.py" "$@" &>> "$LOGFILE" &
+python3 -u "$BASEDIR/main.py" --url $IMAGE_URL "$@"
