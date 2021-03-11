@@ -108,8 +108,8 @@ class Camera:
 
         end_gather = time.time()
 
-        print(len(pred_images))
-        print(end_gather - start)
+        print("Total frames ", len(pred_images))
+        print("Capture time ", end_gather - start)
 
         predicted = model.predict(pred_images)
 
@@ -122,6 +122,8 @@ class Camera:
             with io.BytesIO() as bytesIO:
                 pimg.save(bytesIO, "JPEG", quality=self.quality, optimize=True)
                 response.append(bytesIO.getvalue())
+        end = time.time()
+        print("Total time ", end - start)
         return response, pred_times
 
 camera = Camera(args.url, args.quality, args.snippet)
