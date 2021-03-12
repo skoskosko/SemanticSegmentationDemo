@@ -14,9 +14,6 @@ import tornado.web
 import tornado.websocket
 from PIL import Image
 
-import pygame.camera
-import pygame.image
-
 import urllib
 
 from matplotlib import cm
@@ -83,26 +80,26 @@ class Camera:
         pred_images = []
         pred_times = []
 
-        while(True):
-            start_gather = time.time()
-            with urllib.request.urlopen(self.camera_domain) as url:
-                resp = url.read()
+        # while(True):
+        start_gather = time.time()
+        with urllib.request.urlopen(self.camera_domain) as url:
+            resp = url.read()
 
-            image = np.asarray(bytearray(resp), dtype="uint8")
-            img = cv2.imdecode(image, 0)
+        image = np.asarray(bytearray(resp), dtype="uint8")
+        img = cv2.imdecode(image, 0)
 
-            DIM = (512, 512)
+        DIM = (512, 512)
 
-            img = cv2.resize(img, DIM)
+        img = cv2.resize(img, DIM)
 
-            img = img/255.
-            pred_images.append( np.array(img) )
+        img = img/255.
+        pred_images.append( np.array(img) )
 
-            end_gather = time.time()
+        end_gather = time.time()
 
-            pred_times.append(end_gather - start_gather)
-            if (end_gather - start) > self.snippet:
-                break
+        pred_times.append(end_gather - start_gather)
+            # if (end_gather - start) > self.snippet:
+            #     break
 
         pred_images = np.array(pred_images)
 
@@ -146,11 +143,11 @@ class ImageWebSocket(tornado.websocket.WebSocketHandler):
         jpeg_bytes, times = camera.get_jpeg_image_bytes()
         self.write_message(jpeg_bytes[0], binary=True)
         
-        for i in range(0, len(jpeg_bytes)):
-            start = time.time()
-            self.write_message(jpeg_bytes[i], binary=True)
-            end = time.time()
-            time.sleep(times[i] - (end-start) )
+        # for i in range(0, len(jpeg_bytes)):
+        #     start = time.time()
+        #     self.write_message(jpeg_bytes[i], binary=True)
+        #     end = time.time()
+        #     time.sleep(times[i] - (end-start) )
 
         
     def on_close(self):
